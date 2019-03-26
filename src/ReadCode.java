@@ -4,11 +4,42 @@ import java.io.File;
 
 
 public class ReadCode {
-    public ArrayList<Term> binarySearcher(String wordStart, ArrayList<Term> listOfWords, int length) {
+    public static LeftistHeap<Term> binarySearcher(String wordStart, ArrayList<Term> listOfWords, int listSize) {
+        LeftistHeap<Term> priorityWords = new LeftistHeap<>();
         String currentWord;
-        do {
+        int length = listSize;
+        int position = length/2;
+        boolean found = false;
+        boolean inList = true;
+        while(!found && inList) {
 
-        } while(currentWord)
+            currentWord = listOfWords.get(position).word;
+
+            if(currentWord.startsWith(wordStart)) {
+                Term temp;
+                int preindecies = position;
+
+                do {
+                    priorityWords.insert(listOfWords.get(preindecies--));
+                } while(preindecies >= 0 && listOfWords.get(preindecies).word.startsWith(wordStart));
+
+                position++;
+                do {
+                    priorityWords.insert(listOfWords.get(position++));
+                } while(position < listSize && listOfWords.get(position).word.startsWith(wordStart));
+
+                found = true;
+            }
+            else if(length == 0) {
+                inList = false;
+            }
+            else {
+                length /= 2;
+                position += currentWord.compareTo(wordStart) < 0 ? length : -length;
+            }
+        }
+
+        return priorityWords;
     }
 
     public static void main(String[] args) {
@@ -27,11 +58,18 @@ public class ReadCode {
                 wordArray.add(new Term(word, freq));
             }
 
+            Scanner in = new Scanner(System.in);
             System.out.print("Enter string: ");
-            Scan
+            String input = in.nextLine();
 
 
-            System.out.println("\n\n\n " + leftHeap.deleteMax());
+
+            leftHeap = binarySearcher(input, wordArray, length);
+
+            for(int i = 0; i < 10; i++) {
+                System.out.println(leftHeap.deleteMax());
+            }
+
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
