@@ -56,10 +56,11 @@ public class ReadCode {
     private static LeftistHeap<Term> binarySearcher(String wordStart, ArrayList<Term> listOfWords, int listSize) {
         LeftistHeap<Term> priorityWords = new LeftistHeap<>();
         String currentWord;
-        int length = listSize/2;
+        int length = listSize/2 + 1;
         int position = length;
         boolean found = false;
         boolean inList = true;
+        boolean edgecase = false;
         while(!found && inList) {
 
             currentWord = listOfWords.get(position).word;
@@ -72,18 +73,29 @@ public class ReadCode {
                 } while(preindecies >= 0 && listOfWords.get(preindecies).word.startsWith(wordStart));
 
                 position++;
-                do {
+                while(position < listSize && listOfWords.get(position).word.startsWith(wordStart)) {
                     priorityWords.insert(listOfWords.get(position++));
-                } while(position < listSize && listOfWords.get(position).word.startsWith(wordStart));
+                }
 
                 found = true;
             }
-            else if(length == 0) {
-                inList = false;
-            }
             else {
-                length /= 2;
+                if(edgecase) {
+                    length = 0;
+                }
+                if(length == 1) {
+                    edgecase = true;
+                }
+                else {
+                    length = length / 2;
+                }
+
                 position += currentWord.compareTo(wordStart) < 0 ? length : -length;
+
+                if(length == 0 || position < 0 || position > listSize - 1) {
+                    inList = false;
+                }
+
             }
         }
 
