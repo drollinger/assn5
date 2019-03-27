@@ -1,9 +1,20 @@
+/************************************************
+ * Name: Dallin Drollinger
+ * Description: ReadCode.java was originally given
+ *      in the assignment. It is used as a autocomplete
+ *      for words using a binary search on a given
+ *      dictionary and a leftist heap as a priority queue
+ ***********************************************/
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 
 
 public class ReadCode {
+    /************************************************
+     * private method used for making sure an int is entered
+     ***********************************************/
     static private int badInputCheckerForInt() {
         Scanner in = new Scanner(System.in);
         do {
@@ -17,16 +28,31 @@ public class ReadCode {
         } while (true);
     }
 
-
+    /************************************************
+     * private method to split up the user input to make
+     * and return the appropriate heap
+     * @param input is the string the user entered
+     * @param listOfWords is the dictionary of words
+     *              and must be sorted
+     * @param listSize is the size of the list
+     ***********************************************/
     private static LeftistHeap<Term> createSpecifiedHeap(String input, ArrayList<Term> listOfWords, int listSize) {
         LeftistHeap<Term> combinedHeap = new LeftistHeap<>();
         String[] listOfOrs = input.toLowerCase().replaceAll("\\s", "").split("\\|");
-        for(String prefix : listOfOrs) {
+        for (String prefix : listOfOrs) {
             combinedHeap.merge(binarySearcher(prefix, listOfWords, listSize));
         }
         return combinedHeap;
     }
 
+    /************************************************
+     * private method that does a binary search on the dictionary
+     * list of words given and then returns all words with the
+     * given prefix as a leftist heap.
+     * @param wordStart is the prefix we are looking for
+     * @param listOfWords is the dictionary of sorted words
+     * @param listSize is the size of the list
+     ***********************************************/
     private static LeftistHeap<Term> binarySearcher(String wordStart, ArrayList<Term> listOfWords, int listSize) {
         LeftistHeap<Term> priorityWords = new LeftistHeap<>();
         String currentWord;
@@ -64,6 +90,9 @@ public class ReadCode {
         return priorityWords;
     }
 
+    /************************************************
+     * The main function for the Autocomplete
+     ***********************************************/
     public static void main(String[] args) {
         try {
             LeftistHeap<Term> leftHeap;
